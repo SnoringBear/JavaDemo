@@ -1,0 +1,152 @@
+package a;
+
+import cn.hutool.core.util.StrUtil;
+
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * 数学表达式工具
+ */
+public class MathExpUtil {
+
+    /**
+     * 计算表达式值
+     */
+    public static BigDecimal eval(String express) {
+        Map<Integer, MathExp> baseMathExps = genPostfixExp(express);
+
+        Map<Integer, MathExpInner> mathExps = new LinkedHashMap<>();
+        for (Map.Entry<Integer, MathExp> entry : baseMathExps.entrySet()) {
+            mathExps.put(entry.getKey(), new MathExpInner(entry.getValue()));
+        }
+
+        Map<Integer, BigDecimal> mathResults = new LinkedHashMap<>();
+        BigDecimal result = null;
+        for (MathExpInner exp : mathExps.values()) {
+            exp.eval(mathExps, mathResults);
+            result = mathResults.get(exp.getIndex());
+        }
+
+        return result;
+    }
+
+    /**
+     * 中缀表达式转后缀表达式
+     *
+     * @param express 中缀表达式,需要提前验证表达式中字符是否正确
+     * @return 后缀表达式
+     */
+    public static LinkedHashMap<Integer, MathExp> genPostfixExp(String express) {
+        if (StrUtil.isBlank(express)) {
+            throw new RuntimeException("表达式为空");
+        }
+
+        // 分解字符串,移除空白符,替换中括号、大括号,处理负号,验证括号数量
+        List<Character> chars = new ArrayList<>(express.length());
+        express = express.replaceAll("\\s+", "");// 移除空格
+        int leftBracketCount = 0;// 左括号数量
+        int rightBracketCount = 0;// 右括号数量
+        for (int i = 0; i < express.toCharArray().length; i++) {
+            char ch = express.charAt(i);
+            // 替换中括号和大括号
+            if (ch == '[' || ch == '{') {
+                ch = '(';
+            } else if (ch == ']' || ch == '}') {
+                ch = ')';
+            }
+
+            // 计算括号数量
+            if (ch == '(') {
+                leftBracketCount++;
+            } else if (ch == ')') {
+                rightBracketCount++;
+            }
+            chars.add(ch);
+        }
+        if (leftBracketCount != rightBracketCount) {
+            throw new RuntimeException("表达式为空");
+        }
+
+        Stack<MathExp> operandStack = new Stack<>();// 操作数栈
+        Stack<Character> operatorStack = new Stack<>();// 运算符栈
+        LinkedHashMap<Integer, MathExp> result = new LinkedHashMap<>();// 结果
+        int expNum = 0;
+
+        StringBuilder operandBuff = null;// 操作数缓存
+        for (char ch : chars) {
+            int priority = getOperatorPriority(ch);// 读取运算符优先级
+
+            // 优先级为0表示操作数
+            if (priority == 0) {
+                if (operandBuff == null) {
+                    operandBuff = new StringBuilder();
+                }
+                operandBuff.append(ch);
+                continue;
+            }
+
+            // 处理操作数
+            MathExp operand = new MathExp(expNum++, operandBuff.toString());
+            operandStack.push(operand);
+            result.put(operand.getIndex(), operand);
+            operandBuff = null;
+
+            // 处理运算符
+            while (!operatorStack.isEmpty() && getOperatorPriority(operatorStack.peek()) >= priority) {
+                MathExp operand2 = operandStack.pop();
+                MathExp operand1 = operandStack.pop();
+                char operator = operatorStack.pop();
+                MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), operator);
+                operandStack.push(value);
+                result.put(value.getIndex(), value);
+            }
+            operatorStack.push(ch);
+        }
+
+        // 最后的操作数
+        if (operandBuff != null) {
+            MathExp operand = new MathExp(expNum++, operandBuff.toString());
+            operandStack.push(operand);
+            result.put(operand.getIndex(), operand);
+            operandBuff = null;
+        }
+
+        // 执行剩余的操作
+        while (!operatorStack.isEmpty()) {
+            MathExp operand2 = operandStack.pop();
+            MathExp operand1 = operandStack.pop();
+            char operator = operatorStack.pop();
+            MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), operator);
+            operandStack.push(value);
+            result.put(value.getIndex(), value);
+        }
+        return result;
+    }
+
+    /**
+     * 获取运算符优先级
+     */
+    private static Integer getOperatorPriority(char ch) {
+        switch (ch) {
+            case '+':
+            case '-': {
+                return 1;
+            }
+            case '*':
+            case '/': {
+                return 2;
+            }
+            case '(':
+            case ')':
+            case '[':
+            case ']': {
+                return 3;
+            }
+            default: {
+                return 0;
+            }
+        }
+    }
+
+}
