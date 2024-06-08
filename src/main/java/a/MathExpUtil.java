@@ -47,6 +47,7 @@ public class MathExpUtil {
         express = express.replaceAll("\\s+", "");// 移除空格
         int leftBracketCount = 0;// 左括号数量
         int rightBracketCount = 0;// 右括号数量
+        Stack<Character> temp = new Stack<>();
         for (int i = 0; i < express.toCharArray().length; i++) {
             char ch = express.charAt(i);
             // 替换中括号和大括号
@@ -56,70 +57,65 @@ public class MathExpUtil {
                 ch = ')';
             }
 
+
+            if (getOperatorPriority(ch) == 0) {
+                // 操作数
+                chars.add(ch);
+            } else if (ch == '(') {
+                // 当前字符是左括号，压入栈
+                temp.push(ch);
+            } else if (ch == ')') {
+                // 当前字符是右括号，弹出栈顶操作符直到遇到左括号
+                while (!temp.isEmpty() && temp.peek() != '(') {
+                    chars.add(temp.pop());
+                }
+                temp.pop();
+            } else {
+                // 当前字符是操作符，弹出栈顶操作符直到遇到比当前操作符优先级高的操作符
+                if (!temp.isEmpty() && temp.peek() == '(') {
+                    temp.push(ch);
+                    continue;
+                }
+                while (!temp.isEmpty() && getOperatorPriority(temp.peek()) >= getOperatorPriority(ch)) {
+                    chars.add(temp.pop());
+                }
+                temp.push(ch);
+            }
+
             // 计算括号数量
             if (ch == '(') {
                 leftBracketCount++;
             } else if (ch == ')') {
                 rightBracketCount++;
             }
-            chars.add(ch);
+
+        }
+        while (!temp.isEmpty()) {
+            chars.add(temp.pop());
         }
         if (leftBracketCount != rightBracketCount) {
             throw new RuntimeException("表达式为空");
         }
 
-        Stack<MathExp> operandStack = new Stack<>();// 操作数栈
-        Stack<Character> operatorStack = new Stack<>();// 运算符栈
         LinkedHashMap<Integer, MathExp> result = new LinkedHashMap<>();// 结果
+        Stack<MathExp> operandStack = new Stack<>();// 操作数栈
         int expNum = 0;
-
-        StringBuilder operandBuff = null;// 操作数缓存
         for (char ch : chars) {
             int priority = getOperatorPriority(ch);// 读取运算符优先级
 
             // 优先级为0表示操作数
             if (priority == 0) {
-                if (operandBuff == null) {
-                    operandBuff = new StringBuilder();
-                }
-                operandBuff.append(ch);
-                continue;
-            }
-
-            // 处理操作数
-            MathExp operand = new MathExp(expNum++, operandBuff.toString());
-            operandStack.push(operand);
-            result.put(operand.getIndex(), operand);
-            operandBuff = null;
-
-            // 处理运算符
-            while (!operatorStack.isEmpty() && getOperatorPriority(operatorStack.peek()) >= priority) {
+                // 处理操作数
+                MathExp operand = new MathExp(expNum++, String.valueOf(ch));
+                result.put(operand.getIndex(), operand);
+                operandStack.push(operand);
+            }else {
                 MathExp operand2 = operandStack.pop();
                 MathExp operand1 = operandStack.pop();
-                char operator = operatorStack.pop();
-                MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), operator);
+                MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), ch);
                 operandStack.push(value);
                 result.put(value.getIndex(), value);
             }
-            operatorStack.push(ch);
-        }
-
-        // 最后的操作数
-        if (operandBuff != null) {
-            MathExp operand = new MathExp(expNum++, operandBuff.toString());
-            operandStack.push(operand);
-            result.put(operand.getIndex(), operand);
-            operandBuff = null;
-        }
-
-        // 执行剩余的操作
-        while (!operatorStack.isEmpty()) {
-            MathExp operand2 = operandStack.pop();
-            MathExp operand1 = operandStack.pop();
-            char operator = operatorStack.pop();
-            MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), operator);
-            operandStack.push(value);
-            result.put(value.getIndex(), value);
         }
         return result;
     }
@@ -148,5 +144,4 @@ public class MathExpUtil {
             }
         }
     }
-
 }
