@@ -71,11 +71,12 @@ public class MathExpUtil {
                 }
                 temp.pop();
             } else {
-                // 当前字符是操作符，弹出栈顶操作符直到遇到比当前操作符优先级高的操作符
+                // 当前栈顶字符是左括号，压入栈
                 if (!temp.isEmpty() && temp.peek() == '(') {
                     temp.push(ch);
                     continue;
                 }
+                // 当前字符是操作符，弹出栈顶操作符直到遇到比当前操作符优先级高的操作符
                 while (!temp.isEmpty() && getOperatorPriority(temp.peek()) >= getOperatorPriority(ch)) {
                     chars.add(temp.pop());
                 }
@@ -109,7 +110,7 @@ public class MathExpUtil {
                 MathExp operand = new MathExp(expNum++, String.valueOf(ch));
                 result.put(operand.getIndex(), operand);
                 operandStack.push(operand);
-            }else {
+            } else {
                 MathExp operand2 = operandStack.pop();
                 MathExp operand1 = operandStack.pop();
                 MathExp value = new MathExp(expNum++, operand1.getIndex(), operand2.getIndex(), ch);
