@@ -79,10 +79,7 @@ public class InfixExpressionEvaluator {
         if (op2 == '(' || op2 == ')') {
             return false;
         }
-        if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-')) {
-            return false;
-        }
-        return true;
+        return (op1 != '*' && op1 != '/') || (op2 != '+' && op2 != '-');
     }
 
     private static double applyOperation(char op, double b, double a) throws Exception {
