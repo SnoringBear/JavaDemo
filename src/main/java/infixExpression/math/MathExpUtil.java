@@ -1,9 +1,10 @@
-package a;
+package infixExpression.math;
 
 import cn.hutool.core.util.StrUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
+
 
 /**
  * 数学表达式工具

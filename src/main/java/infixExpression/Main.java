@@ -1,4 +1,6 @@
-import a.MathExpUtil;
+package infixExpression;
+
+import infixExpression.math.MathExpUtil;
 
 public class Main {
     public static void main(String[] args) {

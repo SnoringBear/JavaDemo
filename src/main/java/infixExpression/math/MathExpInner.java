@@ -1,4 +1,4 @@
-package a;
+package infixExpression.math;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * 数学表达式操作内部BigDecimal执行
  */
+
 class MathExpInner extends MathExpBase {
     /** 操作数参数 */
     private BigDecimal p1;

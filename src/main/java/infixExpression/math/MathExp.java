@@ -1,13 +1,13 @@
-package a;
-
-import lombok.Getter;
+package infixExpression.math;
 
 /**
  * 数学表达式操作
  */
-@Getter
+
 public class MathExp extends MathExpBase {
-    /** 字符串参数 */
+    /**
+     * 字符串参数
+     */
     private String p1;
 
     /**
@@ -23,5 +23,9 @@ public class MathExp extends MathExpBase {
      */
     public MathExp(int index, Integer p1, Integer p2, char o) {
         super(index, p1, p2, o);
+    }
+
+    public String getP1() {
+        return p1;
     }
 }
