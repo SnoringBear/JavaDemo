@@ -1,4 +1,4 @@
-package ch02;
+package generics;
 
 public class Generics {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package ch02;
+package collection;
 
 import java.util.Arrays;
 import java.util.Comparator;
