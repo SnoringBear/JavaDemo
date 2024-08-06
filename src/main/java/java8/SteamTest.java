@@ -4,6 +4,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+class Person {
+    private String name;
+    private int age;
+
+    // 构造器、getter和setter省略
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+
 public class SteamTest {
     public static void main(String[] args) {
         // 它提供了一种对集合数据[实现Collection接口]进行高效、简洁和声明式处理的方式
@@ -12,11 +27,12 @@ public class SteamTest {
         //3、惰性求值：在终端操作被调用之前，中间操作不会执行，这有助于优化性能
 
         // steam常见操作
-        filter();
-        map();
-        sorted();
-        aggregationOperations();
-        distinct();
+        //filter();
+        //map();
+        //sorted();
+        //aggregationOperations();
+        //distinct();
+        collectOne();
     }
 
     /**
@@ -98,4 +114,22 @@ public class SteamTest {
                 .collect(Collectors.toList());
         System.out.println("distinctNumbers = " + distinctNumbers);
     }
+
+    /**
+     * 收集一个对象列表里面的某一个元素集合
+     */
+    public static void collectOne() {
+        List<Person> people = Arrays.asList(
+                new Person("Alice", 30),
+                new Person("Bob", 25),
+                new Person("Charlie", 35)
+        );
+
+        List<Integer> ages = people.stream()
+                .map(Person::getAge)
+                .collect(Collectors.toList());
+
+        System.out.println(ages);  // 输出: [30,
+    }
 }
+
