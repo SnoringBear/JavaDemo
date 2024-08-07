@@ -1,14 +1,11 @@
 package java8;
 
 import java.sql.SQLOutput;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public class TimeTest {
     public static void main(String[] args) {
-        test1();
+        test3();
     }
     public static void test1(){
         String openTimeStr="T0:00";
@@ -29,5 +26,11 @@ public class TimeTest {
 
     public static void test2(){
         System.out.println(LocalDateTime.now().getHour());
+    }
+
+    public static void test3(){
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        System.out.println(dayOfWeek.getValue());
     }
 }
