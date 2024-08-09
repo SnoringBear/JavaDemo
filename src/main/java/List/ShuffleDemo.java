@@ -9,7 +9,7 @@ public class ShuffleDemo {
         }
     }
     public static void test1(){
-        Set<Long> subListK = new TreeSet<Long>();
+        Set<Long> subListK = new TreeSet<>();
         if (subListK.size() != 5) {
             // 补充虚拟玩家
             List<Long> virtualPlayers = drawVirtualPlayers();
