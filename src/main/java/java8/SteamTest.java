@@ -106,6 +106,9 @@ public class SteamTest {
         System.out.println("min = " + min);
     }
 
+    /**
+     * 去重
+     */
     public static void distinct() {
         System.out.println("-----------------去重-----------------");
         List<Integer> numbersWithDuplicates = Arrays.asList(1, 2, 2, 3, 3, 3);
