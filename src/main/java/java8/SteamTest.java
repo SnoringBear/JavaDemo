@@ -54,7 +54,7 @@ public class SteamTest {
         System.out.println("-----------------映射-----------------");
         List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
         List<Integer> nameLengths = names.stream()
-                .map(name -> name.length())
+                .map(String::length)
                 .collect(Collectors.toList());
         System.out.println(nameLengths.toString());
     }
@@ -82,8 +82,7 @@ public class SteamTest {
                 .sum();
         System.out.println("sum = " + sum);
 
-        long count = numbers.stream()
-                .count();
+        long count = numbers.size();
         System.out.println("count = " + count);
 
         double average = numbers.stream()
