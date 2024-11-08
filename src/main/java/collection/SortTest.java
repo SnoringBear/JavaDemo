@@ -22,4 +22,8 @@ public class SortTest {
         Collections.sort(list);
         list.forEach(System.out::println);
     }
+
+    public static void test3(){
+
+    }
 }
