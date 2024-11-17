@@ -28,7 +28,7 @@ public class ArrayListTest {
 
     public static void test3() {
         List<Long> roles = new ArrayList<>();
-        for (int i = 0; i < 511; i++) {
+        for (int i = 0; i < 500; i++) {
             roles.add((long) i);
         }
         int n = 50;
@@ -61,8 +61,8 @@ public class ArrayListTest {
             // 每个组人数
             List<Integer> groupSize = groupSize(groupNum, n, m);
             List<List<Long>> groups = initList(groupNum);
+            int index = -1;
             for (List<Long> list : result) {
-                int index = -1;
                 for (Long l : list) {
                     // 分配到分组
                     index = getNextIndex(index,groupNum,groups,groupSize);
@@ -81,9 +81,8 @@ public class ArrayListTest {
         int groupNum = m / n;
         List<Integer> groupSize = groupSize(groupNum, n, m);
         List<List<Long>> groups = initList(groupNum);
+        int index = -1;
         for (List<Long> list : result) {
-            // 每段进行乱序处理
-            int index = -1;
             for (Long l : list) {
                 // 分配到分组
                 index = getNextIndex(index,groupNum,groups,groupSize);
