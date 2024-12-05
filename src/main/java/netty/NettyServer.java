@@ -32,8 +32,8 @@ public class NettyServer {
                     });
 
             ChannelFuture future = bootstrap.bind(9999).sync();
-            System.out.println("Server started on port 9999");
-            future.channel().closeFuture().addListener(future1 -> System.out.println(String.format("tcp关闭监听:%s", 8080))).sync();
+            logger.info("Server started on port 9999");
+            future.channel().closeFuture().addListener(future1 -> logger.info("tcp关闭监听:%s", 8080)).sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
@@ -41,25 +41,27 @@ public class NettyServer {
     }
 
     static class MyHandler extends SimpleChannelInboundHandler<String> {
+        Logger logger = (Logger) LoggerFactory.getLogger("io.netty");
+
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-            System.out.println("Received: " + msg);
+            logger.info("Received: %s" , msg);
             ctx.writeAndFlush("Message received\n");
         }
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            System.out.println("ChannelActive");
+            logger.info("ChannelActive");
         }
 
         @Override
         public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-            System.out.println("ChannelInactive");
+            logger.info("ChannelInactive");
         }
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            System.out.println("exceptionCaught");
+            logger.info("exceptionCaught");
         }
     }
 }
