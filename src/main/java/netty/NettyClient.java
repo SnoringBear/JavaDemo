@@ -29,13 +29,13 @@ public class NettyClient {
                             pip.addLast(new SimpleChannelInboundHandler<String>() {
                                 @Override
                                 protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-                                    System.out.println("Received: " + msg);
+                                    logger.info("Received: %s" , msg);
                                     ctx.writeAndFlush(msg);
                                 }
 
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    System.out.println("建立连接 = " + ctx.channel().remoteAddress());
+                                    logger.info("建立连接 = %s", ctx.channel().remoteAddress());
                                     ctx.writeAndFlush("Hello World2222");
                                 }
 
