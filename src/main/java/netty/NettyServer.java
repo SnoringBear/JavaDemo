@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class NettyServer {
     public static void main(String[] args) throws Exception {
-        Logger logger = (Logger) LoggerFactory.getLogger("io.netty");
+        Logger logger = (Logger) LoggerFactory.getLogger(NettyServer.class);
         logger.setLevel(Level.DEBUG);
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -45,7 +45,7 @@ public class NettyServer {
 
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-            logger.info("Received: %s" , msg);
+            logger.info("Received: {}" , msg);
             ctx.writeAndFlush("Message received\n");
         }
 
