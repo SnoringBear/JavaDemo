@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public class NettyClient {
     public static void main(String[] args) throws InterruptedException {
-        Logger logger = (Logger) LoggerFactory.getLogger("io.netty");
+        Logger logger = (Logger) LoggerFactory.getLogger(NettyClient.class);
         logger.setLevel(Level.DEBUG);
 
         EventLoopGroup group = new NioEventLoopGroup();
