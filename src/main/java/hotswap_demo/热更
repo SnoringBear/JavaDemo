@@ -1,0 +1,43 @@
+热更：两种方式	
+	
+
+
+
+doUpdateCode
+
+	// 热更代码文件夹
+	codeDir:
+	
+	// 热更缓存目录
+	cacheDir:{1_original：2_compiler：3_class}
+	// 编译参数
+	options:
+
+
+	
+	// 复制源码到缓存目录
+
+
+
+	// 热更JAVA文件<JAVA类名(包名.文件名),已热更的JAVA文件MD5值>
+	javaHotMd5Map
+
+
+	redefineClasses
+	// 热更类MD5<类名,已热更的字节码MD5值>
+	hotMd5Map
+
+
+
+doUpdateClass
+	// 热更class文件夹
+	classDir:{}
+	redefineClasses
+
+
+
+
+
+卸载热更
+	读取类最原始的二进制(无热更前的)
+	redefineClasses

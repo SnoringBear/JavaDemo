@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package grpcexample;
+
+option java_package = "io.net_demo.netty.grpc.examples";
+
+service ExampleService {
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string message = 1;
+}
