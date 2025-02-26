@@ -1,4 +1,4 @@
-package thread_demo;
+package thread_demo.concurrent;
 
 import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +37,15 @@ public class CountCaculatorDemo {
                     // 获取许可，获取许可后执行add方法, 在获得许可之前，一直将线程阻塞
                     semaphore.acquire();
                     add();
-                    // 释放许可，并将其返回给信号量
-                    semaphore.release();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }finally {
+                    // 释放许可，并将其返回给信号量
+                    semaphore.release();
                 }
                 // 【在循环内】每当一个线程完成了自己的任务后，计数器的值就会减1，这里指的是初始化CountDownLatch给定的clientTotal减一
                 countDownLatch.countDown();
+
             });
 
         }
